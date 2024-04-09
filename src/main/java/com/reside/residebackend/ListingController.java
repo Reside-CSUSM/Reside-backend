@@ -1,14 +1,13 @@
 package com.reside.residebackend;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.ResourceBundle;
 
 
 @RestController
@@ -16,32 +15,58 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ListingController {
     @Autowired
     private ListingRepository listingRepository;
-
-    @GetMapping("/getAll")
-    public List<Listing> getAllListings() {
-        return listingRepository.findAll();
-    }
-
     @GetMapping("/getById")
-    public Optional<Listing> getListingById(@RequestParam String id){
-        return listingRepository.findById(id);
+    public ResponseEntity<Listing> getListingById(@RequestParam String id){
+        Listing listing = listingRepository.findListingById(id);
+        if(listing != null){
+            return ResponseEntity.ok(listing);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
-
-    @PostMapping("/testingImagesCall")
-    public ArrayList<String> getImages(){
-        ArrayList<String> images = ImagesApiService.fetchImagesData("152 N Twin Oaks Valley Rd, San Marcos, CA 92069");
-        return images;
+    @GetMapping("/getByFormattedAddress")
+    public ResponseEntity<Listing> getListingByFormattedAddress(@RequestParam String formattedAddress){
+        Listing listing = listingRepository.findListingByBodyFormattedAddress(formattedAddress);
+        if(listing != null){
+            return ResponseEntity.ok(listing);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
-    @PostMapping("")
-    public List<Listing> getListings(@RequestParam String city, @RequestParam String state){
+    @GetMapping("/getByAddress")
+    public ResponseEntity<Listing> getListingByAddressLine1(@RequestParam String addressLine1){
+        Listing listing = listingRepository.findListingByBodyAddressLine1(addressLine1);
+        if(listing != null){
+            return ResponseEntity.ok(listing);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+    @GetMapping("/getByCityState")
+    public ResponseEntity<List<Listing>> getListingsByCityState(@RequestParam String city, @RequestParam String state){
+        List<Listing> listings = listingRepository.findListingsByBodyCityAndBodyState(city, state);
+        if(!listings.isEmpty()){
+            return ResponseEntity.ok(listings);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+    @PostMapping("/createByCityState")
+    public ResponseEntity<List<Listing>> getListings(@RequestParam String city, @RequestParam String state){
         ArrayList<Listing> listings = new ArrayList<Listing>(); // used to output the listings found
         ArrayList<String> images = new ArrayList<String>(); // intialize images array
+
+        try{
+            listingRepository.deleteListingsByBodyCityAndBodyState(city, state);
+        } catch (Exception e){
+            System.err.println("Error occurred during deletion: " + e.getMessage());
+        }
 
         ArrayList<RentCastRentalListing> rentCastResults = RentCastApiService.fetchListingData(city, state);
 
         // for each rent cast rental get images, if there are images store the rental if not skip it
         for(RentCastRentalListing rlisting: rentCastResults){
-            if(rlisting.formattedAddress != null){
+            if(rlisting.formattedAddress != null && rlisting.bathrooms != 0){
                 images = ImagesApiService.fetchImagesData(rlisting.formattedAddress);
             }
             else{
@@ -53,6 +78,10 @@ public class ListingController {
                 listingRepository.save(newListing);
             }
         }
-        return listings;
+        if(!listings.isEmpty()){
+            return ResponseEntity.ok(listings);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+        }
     }
 }

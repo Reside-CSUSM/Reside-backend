@@ -43,7 +43,7 @@ public class ImagesApiService {
                 actualItems = objectMapper.readValue(item, String[].class);
             }
             catch(Exception e){
-                System.out.println("Error: "+ e.getMessage());
+                continue;
             }
         }
         return new ArrayList<String>(List.of(actualItems));
