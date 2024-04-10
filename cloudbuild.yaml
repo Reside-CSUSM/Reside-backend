@@ -1,0 +1,12 @@
+steps:
+  # Build step: Use Docker to build the image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/velvety-outcome-419903/github.com/reside-csusm/reside-backend', '.']
+
+  # Push step: Push the built image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/velvety-outcome-419903/github.com/reside-csusm/reside-backend']
+
+options:
+  logging: CLOUD_LOGGING_ONLY  # Specify build logs settings
+  substitution_option: ALLOW_LOOSE  # Specify substitution option if needed
