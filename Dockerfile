@@ -3,8 +3,8 @@ LABEL authors="gabrieltellez"
 
 WORKDIR /src
 
-COPY ./build/libs/reside-backend-0.0.1-SNAPSHOT.jar /src/reside-backend-0.0.1-SNAPSHOT.jar
+COPY gcr.io/velvety-outcome-419903/github.com/reside-csusm/reside-backend.jar /src/gcr.io/velvety-outcome-419903/github.com/reside-csusm/reside-backend
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "reside-backend-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "gcr.io/velvety-outcome-419903/github.com/reside-csusm/reside-backend.jar"]
