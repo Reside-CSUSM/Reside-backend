@@ -1,4 +1,12 @@
 steps:
+  # Check out the source code form the respository
+  - name: 'gcr.io/cloud-builder/git'
+    args: ['clone', 'https://github.com/Reside-CSUSM/Reside-backend.git', '/workspace']
+
+  # Build the Gradle project
+  - name: 'gcr.io/cloud-builders/gradle'
+    args: ['build']
+    dir: '/workspace'
   # Build step: Use Docker to build the image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/velvety-outcome-419903/github.com/reside-csusm/reside-backend', '.']
