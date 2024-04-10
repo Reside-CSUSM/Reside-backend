@@ -1,17 +1,9 @@
 package com.reside.residebackend;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import reactor.core.publisher.Flux;
-
-import java.io.DataInput;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
