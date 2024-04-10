@@ -1,10 +1,25 @@
-FROM openjdk:21
+FROM openjdk:21 as builder
 LABEL authors="gabrieltellez"
 
 WORKDIR /src
 
-COPY gcr.io/velvety-outcome-419903/github.com/reside-csusm/reside-backend.jar /src/gcr.io/velvety-outcome-419903/github.com/reside-csusm/reside-backend
+# Copy the Gradle wrapper files into the container
+COPY gradle/ ./gradle/
+COPY gradlew ./
+
+# Copy the build files into the container
+COPY build.gradle settings.gradle ./
+COPY src ./src/
+
+# Run the Gradle build using the Gradle wrapper
+RUN ./gradlew build
+
+FROM openjdk:21
+
+WORKDIR /src
+
+COPY --from=builder src/build/libs/reside-backend-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "gcr.io/velvety-outcome-419903/github.com/reside-csusm/reside-backend.jar"]
+CMD ["java", "-jar", "reside-backend-0.0.1-SNAPSHOT.jar"]
