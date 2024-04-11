@@ -43,6 +43,7 @@ public class ListingController {
     }
     @GetMapping("/getByCityState")
     public ResponseEntity<List<Listing>> getListingsByCityState(@RequestParam String city, @RequestParam String state){
+
         List<Listing> listings = listingRepository.findListingsByBodyCityAndBodyState(city, state);
         if(!listings.isEmpty()){
             return ResponseEntity.ok(listings);
@@ -54,7 +55,7 @@ public class ListingController {
     public ResponseEntity<List<Listing>> getListings(@RequestParam String city, @RequestParam String state){
         ArrayList<Listing> listings = new ArrayList<Listing>(); // used to output the listings found
         ArrayList<String> images = new ArrayList<String>(); // intialize images array
-
+        System.out.println(city);
         try{
             listingRepository.deleteListingsByBodyCityAndBodyState(city, state);
         } catch (Exception e){
