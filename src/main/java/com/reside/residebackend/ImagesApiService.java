@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 public class ImagesApiService {
-    static String baseUrl = "https://test-repo-vercel-theta.vercel.app";
+    static String baseUrl = "https://image-service-pi.vercel.app";
     static WebClient webClient = WebClient.builder()
             .baseUrl(baseUrl)
             .defaultHeader("Content-Type", "application/json")
