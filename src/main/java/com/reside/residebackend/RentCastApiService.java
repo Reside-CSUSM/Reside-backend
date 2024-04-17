@@ -65,17 +65,19 @@ public class RentCastApiService {
         return stateMap.get(state.replace("+", " ").toLowerCase());
     }
     static String baseUrl = "https://api.rentcast.io/v1";
+    //ENTERPRISE PLAN API KEY
     private static final String RENTCASTAPIKEY = "08003ff919ef4dd99f1bfe3085598296"; // api key from https://app.rentcast.io/app/api
+    private static final String ENTERPRISE_RENTCASTAPIKEY = "68725fe358814ccfa81e23faedd8cb9d";
     static WebClient webClient = WebClient.builder()
             .baseUrl(baseUrl)
             .defaultHeader("Content-Type", "application/json")
-            .defaultHeader("X-Api-Key", RENTCASTAPIKEY)
+            .defaultHeader("X-Api-Key", ENTERPRISE_RENTCASTAPIKEY)
             .build();
 
     public static ArrayList<RentCastRentalListing> fetchListingData(String city, String state){
         city = getStateCode(city);
         state = state.replace("+", " ");
-        String apiPath = "/listings/rental/long-term?city="+ city +"&state="+ state +"&status=Active&limit=499";
+        String apiPath = "/listings/rental/long-term?city="+ city +"&state="+ state +"&status=Active&limit=399";
 
         Flux<RentCastRentalListing> fluxResponse = webClient.get()
                 .uri(apiPath)
