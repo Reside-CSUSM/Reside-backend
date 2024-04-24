@@ -64,6 +64,7 @@ public class RentCastApiService {
         }};
         return stateMap.get(state.replace("+", " ").toLowerCase());
     }
+    
     static String baseUrl = "https://api.rentcast.io/v1";
     //ENTERPRISE PLAN API KEY
     private static final String RENTCASTAPIKEY = "08003ff919ef4dd99f1bfe3085598296"; // api key from https://app.rentcast.io/app/api
