@@ -64,8 +64,11 @@ public class RentCastApiService {
         }};
         return stateMap.get(state.replace("+", " ").toLowerCase());
     }
-    static String baseUrl = "https://api.rentcast.io/v1";
-    private static final String RENTCASTAPIKEY = "08003ff919ef4dd99f1bfe3085598296"; // api key from https://app.rentcast.io/app/api
+
+    //enterprise key 68725fe358814ccfa81e23faedd8cb9d
+    //gabriel's key 08003ff919ef4dd99f1bfe3085598296
+    static String baseUrl = "https://api.rentcast.io/v1";   
+    private static final String RENTCASTAPIKEY = "68725fe358814ccfa81e23faedd8cb9d"; // api key from https://app.rentcast.io/app/api
     static WebClient webClient = WebClient.builder()
             .baseUrl(baseUrl)
             .defaultHeader("Content-Type", "application/json")
