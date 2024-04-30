@@ -8,7 +8,8 @@ group = 'com.reside'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '21'
+	sourceCompatibility = '17'
+	//original was 21
 }
 
 repositories {

@@ -4,6 +4,8 @@ When you're ready, start your application by running:
 `docker compose up --build`.
 
 Your application will be available at http://localhost:8080.
+Run the application by directly typing command java -jar build\libs\reside-backend-0.0.1-SNAPSHOT.jar this will run the .jar with -jar flag in build\libs\whateverfile.jar
+
 
 ### Deploying your application to the cloud
 

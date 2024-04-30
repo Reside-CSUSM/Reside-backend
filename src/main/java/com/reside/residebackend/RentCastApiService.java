@@ -76,9 +76,19 @@ public class RentCastApiService {
             .build();
 
     public static ArrayList<RentCastRentalListing> fetchListingData(String city, String state){
-        city = getStateCode(city);
-        state = state.replace("+", " ");
-        String apiPath = "/listings/rental/long-term?city="+ city +"&state="+ state +"&status=Active&limit=499";
+        //city = getStateCode(city);
+        //state = state.replace("+", " ");
+        
+        System.out.println("-original: "+city + ", " + state);
+        //yashaswi
+        state = getStateCode(state);
+        //yaashaswi
+        city = city.replace(" ", "+");
+        System.out.println("after mod: "+city + ", " + state);
+
+
+
+        String apiPath = "/listings/rental/long-term?city="+ city +"&state="+ state +"&status=Active&limit=400"; //max limit is 500 safe to go 400
 
         Flux<RentCastRentalListing> fluxResponse = webClient.get()
                 .uri(apiPath)

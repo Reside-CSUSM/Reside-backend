@@ -55,7 +55,8 @@ public class ListingController {
     public ResponseEntity<List<Listing>> getListings(@RequestParam String city, @RequestParam String state){
         ArrayList<Listing> listings = new ArrayList<Listing>(); // used to output the listings found
         ArrayList<String> images = new ArrayList<String>(); // intialize images array
-        System.out.println(city);
+        System.out.print(city + ",");
+        System.out.println(state);
         try{
             listingRepository.deleteListingsByBodyCityAndBodyState(city, state);
         } catch (Exception e){
@@ -65,22 +66,28 @@ public class ListingController {
         ArrayList<RentCastRentalListing> rentCastResults = RentCastApiService.fetchListingData(city, state);
 
         // for each rent cast rental get images, if there are images store the rental if not skip it
+        System.out.println("Before");
         for(RentCastRentalListing rlisting: rentCastResults){
+            System.out.println("Searching...");
             if(rlisting.formattedAddress != null && rlisting.bathrooms != 0){
                 images = ImagesApiService.fetchImagesData(rlisting.formattedAddress);
+                System.out.println("called the image api");
             }
             else{
                 continue;
             }
             if(!images.isEmpty()){
+                System.out.println("recieved images!");
                 Listing newListing = new Listing(rlisting, images);
                 listings.add(newListing);
                 listingRepository.save(newListing);
             }
         }
         if(!listings.isEmpty()){
+            System.out.println("Filled");
             return ResponseEntity.ok(listings);
         } else {
+            System.out.println("Empty");
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
         }
     }
