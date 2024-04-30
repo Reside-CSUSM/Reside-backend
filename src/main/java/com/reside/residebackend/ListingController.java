@@ -1,12 +1,17 @@
 package com.reside.residebackend;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -14,6 +19,43 @@ import java.util.List;
 public class ListingController {
     @Autowired
     private ListingRepository listingRepository;
+
+
+    @PostMapping("/addUserFavoriteListing")
+    public ResponseEntity<String> addFavoriteListing(@RequestParam String listingId, @RequestParam String userId){
+        //Adds the user which 'favorited' to listing collection which contains seenBy array
+        Listing listing = listingRepository.findListingById(listingId);
+        
+        if(listing == null){return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("listing doesn't exist with this id");}
+        //Check if the userId doesn't exist in the array
+        if(listing.getViewedBy().indexOf(userId) == -1){
+            Boolean status = listing.getViewedBy().add(userId);
+            listingRepository.save(listing);
+            if(status == false){ResponseEntity.ok("couldn't add the userId to viewedBy");}
+            else {return ResponseEntity.ok("added userId successfully");}
+        }
+        //Run this section if userId already exists within the array
+        return ResponseEntity.ok("user already exists");
+    }
+
+    @PostMapping("/deleteUserFavoriteListing")
+    public ResponseEntity<String> deleteFavoriteListing(@RequestParam String listingId, @RequestParam String userId) {
+        //Deletes the user which 'favorited' the listing and deletes it within the collection in seenBy array
+        
+        Listing listing = listingRepository.findListingById(listingId);
+        if(listing == null){return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("listing doesn't exist with this id");}
+        //If the userId does exist in the array
+        if(listing.getViewedBy().indexOf(userId) != -1){
+            Boolean status =  listing.getViewedBy().remove(userId);
+            listingRepository.save(listing);
+            if(status == false){return ResponseEntity.ok("couldn't delete the userId in viewedBy");}
+            else {return ResponseEntity.ok("userId deleted successfully");}
+        }   
+
+        //If the userId doesn't exist already
+        return ResponseEntity.ok("user already doesn't exist");
+    }
+    
     @GetMapping("/getById")
     public ResponseEntity<Listing> getListingById(@RequestParam String id){
         Listing listing = listingRepository.findListingById(id);
