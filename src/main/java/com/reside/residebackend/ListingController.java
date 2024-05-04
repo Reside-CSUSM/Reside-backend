@@ -22,7 +22,7 @@ public class ListingController {
 
 
     @PostMapping("/addUserFavoriteListing")
-    public ResponseEntity<String> addFavoriteListing(@RequestParam String listingId, @RequestParam String userId){
+    public ResponseEntity<String> addUserFavoriteListing(@RequestParam String listingId, @RequestParam String userId){
         //Adds the user which 'favorited' to listing collection which contains seenBy array
         Listing listing = listingRepository.findListingById(listingId);
         
@@ -39,7 +39,7 @@ public class ListingController {
     }
 
     @PostMapping("/deleteUserFavoriteListing")
-    public ResponseEntity<String> deleteFavoriteListing(@RequestParam String listingId, @RequestParam String userId) {
+    public ResponseEntity<String> deleteUserFavoriteListing(@RequestParam String listingId, @RequestParam String userId) {
         //Deletes the user which 'favorited' the listing and deletes it within the collection in seenBy array
         
         Listing listing = listingRepository.findListingById(listingId);
