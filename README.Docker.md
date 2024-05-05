@@ -1,5 +1,7 @@
 ### Building and running your application
-
+To build source code use './gradlew build'
+To create docker image use 'docker build -t reside-backend .'
+To push image to docker hub use 'docker push dockerHubUserName/reside-backend'
 When you're ready, start your application by running:
 `docker compose up --build`.
 
