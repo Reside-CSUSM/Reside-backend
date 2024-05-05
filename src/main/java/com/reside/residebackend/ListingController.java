@@ -38,6 +38,7 @@ public class ListingController {
         return ResponseEntity.ok("user already exists");
     }
 
+    
     @PostMapping("/deleteUserFavoriteListing")
     public ResponseEntity<String> deleteUserFavoriteListing(@RequestParam String listingId, @RequestParam String userId) {
         //Deletes the user which 'favorited' the listing and deletes it within the collection in seenBy array
